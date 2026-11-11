@@ -17,7 +17,7 @@ jobs:
           submodules: recursive
 
       - name: Setup devkitPro
-        uses: devkitPro/pacman@v1
+        uses: devkitPro/pacman@v5
 
       - name: Install dependencies
         run: |
