@@ -1,0 +1,45 @@
+name: Build sys-clk-OC
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - develop
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Setup devkitPro
+        uses: devkitPro/pacman@v1
+
+      - name: Install dependencies
+        run: |
+          sudo dkp-pacman -S --noconfirm \
+            switch-dev \
+            switch-libnx \
+            switch-mesa \
+            devkitA64 \
+            libnx
+
+      - name: Build
+        run: |
+          chmod +x build.sh
+          ./build.sh
+
+      - name: Package
+        run: |
+          cd dist
+          zip -r ../sys-clk-OC.zip .
+
+      - name: Upload ZIP
+        uses: actions/upload-artifact@v4
+        with:
+          name: sys-clk-OC
+          path: sys-clk-OC.zip
